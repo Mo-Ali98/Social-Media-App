@@ -6,10 +6,11 @@ const resolvers = require('./graphql/resolvers');
 const { MONGODB } = require('./config.js');
 
 
-
 const server = new ApolloServer({
   typeDefs,
-  resolvers
+  resolvers,
+  //Access header info of request for authentication and authorisation
+  context: ({ req }) => ({ req })
 });
 
 //Connects to dtabase then runs the server at port 5000
