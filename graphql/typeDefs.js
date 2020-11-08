@@ -1,9 +1,27 @@
 const { gql } = require('apollo-server');
 
+//Type defintitions
+
+/* GraphQL mutations create and modify objects, similar to a PUT, POST, or DELETE request in REST. Mutation requests are sent to the same endpoint as query requests.*/
 module.exports = gql`
   type Post {
     id: ID!
     body: String!
+    createdAt: String!
+    username: String!
+    comments: [Comment]!
+    likes: [Like]!
+    likeCount: Int!
+    commentCount: Int!
+  }
+  type Comment {
+    id: ID!
+    createdAt: String!
+    username: String!
+    body: String!
+  }
+  type Like {
+    id: ID!
     createdAt: String!
     username: String!
   }
@@ -29,5 +47,11 @@ module.exports = gql`
     login(username: String!, password: String!): User!
     createPost(body: String!): Post!
     deletePost(postId: ID!): String!
+    createComment(postId: String!, body: String!): Post!
+    deleteComment(postId: ID!, commentId: ID!): Post!
+    likePost(postId: ID!): Post!
+  }
+  type Subscription {
+    newPost: Post!
   }
 `;

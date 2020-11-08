@@ -8,13 +8,24 @@ Whenever a client queries for a particular field, the resolver for that field fe
 /*GraphQL mutations create and modify objects, similar to a PUT, POST, or DELETE request in REST. Mutation requests are sent to the same endpoint as query requests.*/
 const postsResolvers = require('./posts');
 const usersResolvers = require('./users');
+const commentsResolvers = require('./comments');
+
 
 module.exports = {
+    //retrieves likes and comment counts
+  Post: {
+    likeCount: (parent) => parent.likes.length,
+    commentCount: (parent) => parent.comments.length
+    },
   Query: {
     ...postsResolvers.Query
   },
   Mutation: {
     ...usersResolvers.Mutation,
-    ...postsResolvers.Mutation
+    ...postsResolvers.Mutation,
+    ...commentsResolvers.Mutation
+  },
+  Subscription: {
+    ...postsResolvers.Subscription
   }
 };

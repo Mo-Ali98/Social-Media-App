@@ -33,7 +33,11 @@ module.exports = {
     //Prevents anyone from creating a post only users registered
     async createPost(_, { body }, context) {
       const user = checkAuth(context);
-      console.log(user);
+
+      if (args.body.trim() === '') {
+        throw new Error('Post body must not be empty');
+      }
+
         //User is authenticated and create post based of Post model
       const newPost = new Post({
         body,
@@ -43,6 +47,9 @@ module.exports = {
       });
       //saves post
       const post = await newPost.save();
+      context.pubsub.publish('NEW_POST', {
+        newPost: post
+      });
 
       return post;
     },
@@ -63,6 +70,37 @@ module.exports = {
       } catch (err) {
         throw new Error(err);
       }
-    }
-  }
+    },
+    //To like post get postid and current logged in user (context)
+    async likePost(_, { postId }, context) {
+        //Check suth of user
+        const { username } = checkAuth(context);
+        //get post user wants to like
+        const post = await Post.findById(postId);
+
+        //if post exists then like the post
+        if (post) {
+          //check if user previously liked  
+          if (post.likes.find((like) => like.username === username)) {
+            // Post already likes, unlike it (filters likes of users only getting the user we want)
+            post.likes = post.likes.filter((like) => like.username !== username);
+          } else {
+            // Not liked, like post
+            post.likes.push({
+              username,
+              createdAt: new Date().toISOString()
+            });
+          }
+          //carry save
+          await post.save();
+          return post;
+        } else throw new UserInputError('Post not found');
+      }
+    },
+    //keeps a log of new posts etc
+    Subscription: {
+        newPost: {
+          subscribe: (_, __, { pubsub }) => pubsub.asyncIterator('NEW_POST')
+        }
+      }
 };
