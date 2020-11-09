@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 
 function MenuBar() {
   const pathname = window.location.pathname;
-  {/* Uses if statement to get current path */}
+  //{/* Uses if statement to get current path */}
   const path = pathname === '/' ? 'home' : pathname.substr(1);
-  {/* States to handle which menu item is active (sets activeitem to the path)*/}
+  //{/* States to handle which menu item is active (sets activeitem to the path)*/}
   const [activeItem, setActiveItem] = useState(path);
 
   const handleItemClick = (e, { name }) => setActiveItem(name);
