@@ -5,7 +5,7 @@ const Post = require('../../models/Post');
 
 module.exports = {
   Mutation: {
-    //context checks if user is loggedin and postid and body of the post the user wants to comment on
+    //context checks if user is loggedin and postid and body of the post the user wants to comment on if theirs
     createComment: async (_, { postId, body }, context) => {
       //Check if user is logged in
       const { username } = checkAuth(context);
