@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+
+// HANDLES THE FORM CHANGES AND SUBMISSIONS in the form and returns the submitted values
 export const useForm = (callback, initialState = {}) => {
   const [values, setValues] = useState(initialState);
 

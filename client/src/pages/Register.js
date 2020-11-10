@@ -8,7 +8,7 @@ import { useForm } from '../util/hooks';
 function Register(props) {
     const [errors, setErrors] = useState({});
     
-    //Default Form values are empty and chenage onChange
+    //Dcallback is returned from useForm providing it the defualt values and addUser Function
     const { onChange, onSubmit, values } = useForm(registerUser, {
       username: '',
       email: '',

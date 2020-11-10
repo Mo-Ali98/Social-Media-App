@@ -5,6 +5,8 @@ import gql from 'graphql-tag';
 
 import { useForm } from '../util/hooks';
 
+//similar to register.js
+
 function Login(props) {
   const [errors, setErrors] = useState({});
 
@@ -13,6 +15,7 @@ function Login(props) {
     password: ''
   });
 
+  //Carry out login mutation and check if successful
   const [loginUser, { loading }] = useMutation(LOGIN_USER, {
     update(_, result) {
       props.history.push('/');
@@ -66,6 +69,8 @@ function Login(props) {
   );
 }
 
+
+//Login Query
 const LOGIN_USER = gql`
   mutation login($username: String!, $password: String!) {
     login(username: $username, password: $password) {
