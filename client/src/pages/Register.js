@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Button, Form } from 'semantic-ui-react';
 import { useMutation } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 
 import { useForm } from '../util/hooks';
+import { AuthContext } from '../context/auth';
+
 
 function Register(props) {
+    const context = useContext(AuthContext);
     const [errors, setErrors] = useState({});
     
     //Dcallback is returned from useForm providing it the defualt values and addUser Function
@@ -19,10 +22,11 @@ function Register(props) {
     //function to carry out mutation register
     const [addUser, { loading }] = useMutation(REGISTER_USER, {
     //Updates if register mutation is accepted
-      update(_, result) {
+    update(_,{ data: { register: userData }}
+    ) {
+        context.login(userData);
         //refirect to homepage if successful
         props.history.push('/');
-        console.log(result)
       },
       // If there are errors return them in an array
       onError(err) {
