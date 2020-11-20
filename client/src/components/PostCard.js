@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button, Card, Icon, Label, Image } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+
+
+import { AuthContext } from '../context/auth';
+import LikeButton from './LikeButton';
+
 
 //Get Post arguement and its properties of the Post via destructure (post :{})
 function PostCard({
@@ -12,9 +17,8 @@ function likePost() {
     console.log('Like post!!', `${id}`);
 }
 
-function commentOnPost() {
-    console.log('Comment on post!!', `${id}`);
-}
+const { user } = useContext(AuthContext);
+
 
   return (
     <Card fluid>
@@ -40,15 +44,8 @@ function commentOnPost() {
         {/* Like and Comment buttons  */}
       </Card.Content>
       <Card.Content extra>
-        <Button as="div" labelPosition="right" onClick={likePost}>
-          <Button color="teal" basic>
-            <Icon name="heart" />
-          </Button>
-          <Label basic color="teal" pointing="left">
-            {likeCount}
-          </Label>
-        </Button>
-        <Button as="div" labelPosition="right" onClick={commentOnPost}>
+        <LikeButton user={user} post={{ id, likes, likeCount }} />
+        <Button as="div" labelPosition="right" as={Link} to={`/posts/${id}`}>
           <Button color="blue" basic>
             <Icon name="comments" />
           </Button>
@@ -56,6 +53,19 @@ function commentOnPost() {
             {commentCount}
           </Label>
         </Button>
+
+        {/** If user is logged in is equal to the owner of the post show delete icon */}
+        {user && user.username === username && (
+          <Button
+            as="div"
+            color="red"
+            floated="right"
+            onClick={() => console.log('Delete post')}
+          >
+            <Icon name="trash" style={{ margin: 0 }} />
+          </Button>
+        )}
+
       </Card.Content>
     </Card>
   );
