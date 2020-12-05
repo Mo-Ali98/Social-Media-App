@@ -6,6 +6,8 @@ import moment from 'moment';
 
 import { AuthContext } from '../context/auth';
 import LikeButton from './LikeButton';
+import DeleteButton from '../components/DeleteButton';
+
 
 
 //Get Post arguement and its properties of the Post via destructure (post :{})
@@ -29,7 +31,7 @@ const { user } = useContext(AuthContext);
           src="https://react.semantic-ui.com/images/avatar/large/molly.png"
         />
         {/*Use post's props into crad components*/}
-        <Card.Header>{username}</Card.Header>
+        <Card.Header as={Link} to={`/posts/${id}`} >{username}</Card.Header>
 
         {/* Use post id to provide each post a unique link */}
         <Card.Meta as={Link} to={`/posts/${id}`}> 
@@ -55,16 +57,8 @@ const { user } = useContext(AuthContext);
         </Button>
 
         {/** If user is logged in is equal to the owner of the post show delete icon */}
-        {user && user.username === username && (
-          <Button
-            as="div"
-            color="red"
-            floated="right"
-            onClick={() => console.log('Delete post')}
-          >
-            <Icon name="trash" style={{ margin: 0 }} />
-          </Button>
-        )}
+        {user && user.username === username && <DeleteButton postId={id} />}
+
 
       </Card.Content>
     </Card>
